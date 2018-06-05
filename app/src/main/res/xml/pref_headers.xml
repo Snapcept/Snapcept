@@ -1,12 +1,12 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-        android:fragment="local.snapcept.activities.settings.SettingsActivity$SnapsPreferenceFragment"
+        android:fragment="local.snapcept.app.activities.settings.SettingsActivity$SnapsPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="Snaps" />
 
     <header
-        android:fragment="local.snapcept.activities.settings.SettingsActivity$StoriesPreferenceFragment"
+        android:fragment="local.snapcept.app.activities.settings.SettingsActivity$StoriesPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="Stories" />
 

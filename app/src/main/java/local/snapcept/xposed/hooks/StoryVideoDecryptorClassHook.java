@@ -1,4 +1,4 @@
-package local.snapcept.hooks;
+package local.snapcept.xposed.hooks;
 
 import android.content.Context;
 
@@ -10,15 +10,20 @@ import java.io.InputStream;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import local.snapcept.SnapceptConstants;
-import local.snapcept.SnapceptSaver;
-import local.snapcept.snapchat.SnapInfo;
+import local.snapcept.xposed.config.SnapceptSettings;
+import local.snapcept.xposed.config.SnapceptSettingsUtil;
+import local.snapcept.xposed.snapchat.SnapConstants;
+import local.snapcept.xposed.SnapceptSaver;
+import local.snapcept.xposed.snapchat.SnapInfo;
 
 public class StoryVideoDecryptorClassHook extends XC_MethodHook {
 
+    private final SnapceptSettings settings;
+
     private final Context context;
 
-    public StoryVideoDecryptorClassHook(Context context) {
+    public StoryVideoDecryptorClassHook(SnapceptSettings settings, Context context) {
+        this.settings = settings;
         this.context = context;
     }
 
@@ -32,7 +37,7 @@ public class StoryVideoDecryptorClassHook extends XC_MethodHook {
         // Find possible attached object.
         SnapInfo snapInfo = (SnapInfo) XposedHelpers.getAdditionalInstanceField(
                 encryptionAlgorithm,
-                SnapceptConstants.ADDITIONAL_FIELD_ENCRYPTION_ALGORITHM_SNAP_INFO);
+                SnapConstants.ADDITIONAL_FIELD_ENCRYPTION_ALGORITHM_SNAP_INFO);
 
         if (snapInfo == null) {
             return;
@@ -42,8 +47,13 @@ public class StoryVideoDecryptorClassHook extends XC_MethodHook {
             return;
         }
 
+        // Check if we have settings enabled to save this.
+        if (!SnapceptSettingsUtil.maySave(this.settings, snapInfo)) {
+            return;
+        }
+
         // Check if saved so we can possibly skip.
-        SnapceptSaver saver = new SnapceptSaver(this.context, z, snapInfo);
+        SnapceptSaver saver = new SnapceptSaver(this.settings, this.context, z, snapInfo);
 
         if (saver.isSaved()) {
             // Let the original call run.
@@ -59,10 +69,10 @@ public class StoryVideoDecryptorClassHook extends XC_MethodHook {
         // Reimplementation of the decrypt method.
         InputStream decryptedStream;
 
-        if (z6 || encryptionAlgorithm == null || encryptionAlgorithm.getClass().getCanonicalName().contains(SnapceptConstants.UNENCRYPTED_ALGORITHM_INTERFACE)) {
+        if (z6 || encryptionAlgorithm == null || encryptionAlgorithm.getClass().getCanonicalName().contains(SnapConstants.UNENCRYPTED_ALGORITHM_INTERFACE)) {
             decryptedStream = inputStream;
         } else {
-            decryptedStream = (InputStream) XposedHelpers.callMethod(encryptionAlgorithm, SnapceptConstants.CBC_ENCRYPTION_ALGORITHM_DECRYPT, inputStream);
+            decryptedStream = (InputStream) XposedHelpers.callMethod(encryptionAlgorithm, SnapConstants.CBC_ENCRYPTION_ALGORITHM_DECRYPT, inputStream);
         }
 
         // decryptedStream is closed quietly.
@@ -72,7 +82,7 @@ public class StoryVideoDecryptorClassHook extends XC_MethodHook {
         param.setResult(
                 XposedHelpers.callMethod(
                         param.thisObject,
-                        SnapceptConstants.SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT,
+                        SnapConstants.SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT,
                         param.args[0],
                         new BufferedInputStream(bufferStream.toInputStream()),
                         param.args[2],

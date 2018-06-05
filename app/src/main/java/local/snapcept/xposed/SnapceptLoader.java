@@ -1,4 +1,4 @@
-package local.snapcept;
+package local.snapcept.xposed;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -7,16 +7,20 @@ import android.net.Uri;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import local.snapcept.hooks.CbcEncryptionAlgorithmClassHook;
-import local.snapcept.hooks.RootDetectorOverrides;
-import local.snapcept.hooks.SnapEventClassHook;
-import local.snapcept.hooks.StoryEventClassHook;
-import local.snapcept.hooks.StoryVideoDecryptorClassHook;
-import local.snapcept.utils.LogUtils;
+import local.snapcept.xposed.config.SnapceptSettings;
+import local.snapcept.xposed.hooks.CbcEncryptionAlgorithmClassHook;
+import local.snapcept.xposed.hooks.RootDetectorOverrides;
+import local.snapcept.xposed.hooks.SnapEventClassHook;
+import local.snapcept.xposed.hooks.StoryEventClassHook;
+import local.snapcept.xposed.hooks.StoryVideoDecryptorClassHook;
+import local.snapcept.xposed.snapchat.SnapConstants;
+import local.snapcept.xposed.utils.LogUtils;
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
@@ -27,6 +31,8 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
     private Context context;
 
+    private SnapceptSettings settings;
+
     public SnapceptLoader() {
         this.processedIds = new HashSet<>();
     }
@@ -34,7 +40,7 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         // Check if we are hooking on the correct package.
-        if (!lpparam.packageName.equals(SnapceptConstants.PACKAGE_NAME)) {
+        if (!lpparam.packageName.equals(SnapConstants.PACKAGE_NAME) || !lpparam.isFirstApplication) {
             return;
         }
 
@@ -43,12 +49,15 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
         // Check if the correct version is used.
         if (!isVersionCorrect()) {
-            LogUtils.logTrace("Wrong Snapchat version. Ensure version " + SnapceptConstants.PACKAGE_VERSION_STRING + " is installed.");
+            LogUtils.logTrace("Wrong Snapchat version. Ensure version " + SnapConstants.PACKAGE_VERSION_STRING + " is installed.");
             return;
         }
 
         // Announce correct version.
         LogUtils.logTrace("Correct Snapchat version, have fun.");
+
+        // Initialize more values used by the module.
+        initializePost();
 
         // Hook root detectors.
         hookRootDetectors(lpparam.classLoader);
@@ -64,6 +73,9 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
         // Hook video story decryptor.
         hookStoryVideoDecryptor(lpparam.classLoader);
+
+        // Just to be sure.
+        this.settings.reload();
     }
 
     private void initialize() {
@@ -71,53 +83,57 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
         context = (Context) XposedHelpers.callMethod(activityThread, "getSystemContext");
     }
 
+    private void initializePost() {
+        settings = new SnapceptSettings(context);
+    }
+
     private boolean isVersionCorrect() throws Throwable {
-        PackageInfo snapchatPackage = context.getPackageManager().getPackageInfo(SnapceptConstants.PACKAGE_NAME, 0);
-        return snapchatPackage.versionCode == SnapceptConstants.PACKAGE_VERSION;
+        PackageInfo snapchatPackage = context.getPackageManager().getPackageInfo(SnapConstants.PACKAGE_NAME, 0);
+        return snapchatPackage.versionCode == SnapConstants.PACKAGE_VERSION;
     }
 
     private void hookRootDetectors(ClassLoader loader) {
-        findAndHookMethod(SnapceptConstants.ROOT_DETECTOR_CLASS, loader, SnapceptConstants.ROOT_DETECTOR_FIRST, new RootDetectorOverrides());
-        findAndHookMethod(SnapceptConstants.ROOT_DETECTOR_CLASS, loader, SnapceptConstants.ROOT_DETECTOR_SECOND, new RootDetectorOverrides());
-        findAndHookMethod(SnapceptConstants.ROOT_DETECTOR_CLASS, loader, SnapceptConstants.ROOT_DETECTOR_THIRD, new RootDetectorOverrides());
-        findAndHookMethod(SnapceptConstants.ROOT_DETECTOR_CLASS, loader, SnapceptConstants.ROOT_DETECTOR_FORTH, new RootDetectorOverrides());
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_FIRST, new RootDetectorOverrides());
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_SECOND, new RootDetectorOverrides());
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_THIRD, new RootDetectorOverrides());
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_FORTH, new RootDetectorOverrides());
     }
 
     private void hookSnapEventClass(ClassLoader loader) {
         findAndHookMethod(
-                SnapceptConstants.SNAP_PROCESSING_CLASS,
+                SnapConstants.SNAP_PROCESSING_CLASS,
                 loader,
-                SnapceptConstants.SNAP_PROCESSING_HANDLE_METHOD,
-                SnapceptConstants.SNAP_EVENT_CLASS,
+                SnapConstants.SNAP_PROCESSING_HANDLE_METHOD,
+                SnapConstants.SNAP_EVENT_CLASS,
                 String.class,
                 new SnapEventClassHook(this.processedIds));
     }
 
     private void hookStoryEventClass(ClassLoader loader) {
         findAndHookMethod(
-                SnapceptConstants.STORY_EVENT_CLASS,
+                SnapConstants.STORY_EVENT_CLASS,
                 loader,
-                SnapceptConstants.STORY_EVENT_METHOD_GET_ENCRYPTION_ALGORITHM,
+                SnapConstants.STORY_EVENT_METHOD_GET_ENCRYPTION_ALGORITHM,
                 new StoryEventClassHook(this.processedIds));
     }
 
     private void hookCbcEncryptionAlgorithmClass(ClassLoader loader) {
         findAndHookMethod(
-                SnapceptConstants.CBC_ENCRYPTION_ALGORITHM_CLASS,
+                SnapConstants.CBC_ENCRYPTION_ALGORITHM_CLASS,
                 loader,
-                SnapceptConstants.CBC_ENCRYPTION_ALGORITHM_DECRYPT,
+                SnapConstants.CBC_ENCRYPTION_ALGORITHM_DECRYPT,
                 InputStream.class,
-                new CbcEncryptionAlgorithmClassHook(this.context));
+                new CbcEncryptionAlgorithmClassHook(this.settings, this.context));
     }
 
     private void hookStoryVideoDecryptor(ClassLoader loader) {
         findAndHookMethod(
-                SnapceptConstants.SNAP_VIDEO_DECRYPTOR_CLASS,
+                SnapConstants.SNAP_VIDEO_DECRYPTOR_CLASS,
                 loader,
-                SnapceptConstants.SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT,
+                SnapConstants.SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT,
                 String.class,
                 InputStream.class,
-                SnapceptConstants.ENCRYPTION_ALGORITHM_INTERFACE,
+                SnapConstants.ENCRYPTION_ALGORITHM_INTERFACE,
                 boolean.class,
                 boolean.class,
                 boolean.class,
@@ -125,7 +141,7 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
                 boolean.class,
                 boolean.class,
                 boolean.class,
-                new StoryVideoDecryptorClassHook(this.context));
+                new StoryVideoDecryptorClassHook(this.settings, this.context));
     }
 
 }

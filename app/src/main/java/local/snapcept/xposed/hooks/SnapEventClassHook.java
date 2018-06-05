@@ -1,13 +1,13 @@
-package local.snapcept.hooks;
+package local.snapcept.xposed.hooks;
 
 import java.util.Locale;
 import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
-import local.snapcept.SnapceptConstants;
-import local.snapcept.snapchat.SnapInfo;
-import local.snapcept.utils.LogUtils;
+import local.snapcept.xposed.snapchat.SnapConstants;
+import local.snapcept.xposed.snapchat.SnapInfo;
+import local.snapcept.xposed.utils.LogUtils;
 
 public class SnapEventClassHook extends XC_MethodHook {
 
@@ -20,19 +20,19 @@ public class SnapEventClassHook extends XC_MethodHook {
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         Object snapEventObject = param.args[0];
-        Object encryptionObject = XposedHelpers.getObjectField(param.getResult(), SnapceptConstants.MEDIA_CACHE_ENTRY_FIELD_ENCRYPTION_ALGORITHM);
+        Object encryptionObject = XposedHelpers.getObjectField(param.getResult(), SnapConstants.MEDIA_CACHE_ENTRY_FIELD_ENCRYPTION_ALGORITHM);
 
-        String snapId = (String) XposedHelpers.getObjectField(snapEventObject, SnapceptConstants.SNAP_EVENT_FIELD_ID);
+        String snapId = (String) XposedHelpers.getObjectField(snapEventObject, SnapConstants.SNAP_EVENT_FIELD_ID);
         SnapInfo snapInfo;
 
-        Object snapTypeObject = XposedHelpers.callMethod(snapEventObject, SnapceptConstants.SNAP_EVENT_METHOD_ORIGIN);
+        Object snapTypeObject = XposedHelpers.callMethod(snapEventObject, SnapConstants.SNAP_EVENT_METHOD_ORIGIN);
         String snapType = (String) XposedHelpers.callMethod(snapTypeObject, "toString");
 
         snapInfo = new SnapInfo(snapId, snapType);
-        snapInfo.setUsername((String) XposedHelpers.getObjectField(snapEventObject, SnapceptConstants.SNAP_EVENT_USERNAME_FIELD));
-        snapInfo.setTimestamp(XposedHelpers.getLongField(snapEventObject, SnapceptConstants.SNAP_EVENT_TIMESTAMP_FIELD));
-        snapInfo.setVideo((boolean) XposedHelpers.callMethod(snapEventObject, SnapceptConstants.SNAP_EVENT_IS_VIDEO));
-        snapInfo.setZipped((boolean) XposedHelpers.getObjectField(snapEventObject, SnapceptConstants.SNAP_EVENT_IS_ZIPPED_FIELD));
+        snapInfo.setUsername((String) XposedHelpers.getObjectField(snapEventObject, SnapConstants.SNAP_EVENT_USERNAME_FIELD));
+        snapInfo.setTimestamp(XposedHelpers.getLongField(snapEventObject, SnapConstants.SNAP_EVENT_TIMESTAMP_FIELD));
+        snapInfo.setVideo((boolean) XposedHelpers.callMethod(snapEventObject, SnapConstants.SNAP_EVENT_IS_VIDEO));
+        snapInfo.setZipped((boolean) XposedHelpers.getObjectField(snapEventObject, SnapConstants.SNAP_EVENT_IS_ZIPPED_FIELD));
 
         if (snapInfo.getUsername() == null) {
             return;
@@ -52,7 +52,7 @@ public class SnapEventClassHook extends XC_MethodHook {
 
         XposedHelpers.setAdditionalInstanceField(
                 encryptionObject,
-                SnapceptConstants.ADDITIONAL_FIELD_ENCRYPTION_ALGORITHM_SNAP_INFO,
+                SnapConstants.ADDITIONAL_FIELD_ENCRYPTION_ALGORITHM_SNAP_INFO,
                 snapInfo);
     }
 

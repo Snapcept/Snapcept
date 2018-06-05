@@ -1,6 +1,6 @@
-package local.snapcept;
+package local.snapcept.xposed.snapchat;
 
-public class SnapceptConstants {
+public class SnapConstants {
 
     // Snapchat app related constants, all found in "AndroidManifest.xml".
 

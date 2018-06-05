@@ -1,6 +1,5 @@
-package local.snapcept.utils;
+package local.snapcept.xposed.utils;
 
-import android.content.Context;
 import android.os.Environment;
 
 import org.apache.commons.io.IOUtils;

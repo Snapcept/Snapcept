@@ -1,4 +1,4 @@
-package local.snapcept.utils;
+package local.snapcept.xposed.utils;
 
 import de.robv.android.xposed.XposedBridge;
 

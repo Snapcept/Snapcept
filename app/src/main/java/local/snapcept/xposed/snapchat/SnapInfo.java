@@ -1,12 +1,12 @@
-package local.snapcept.snapchat;
+package local.snapcept.xposed.snapchat;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import local.snapcept.utils.FileUtils;
-import local.snapcept.utils.LogUtils;
+import local.snapcept.xposed.utils.FileUtils;
+import local.snapcept.xposed.utils.LogUtils;
 
 public class SnapInfo {
 

@@ -1,4 +1,4 @@
-package local.snapcept.hooks;
+package local.snapcept.xposed.hooks;
 
 import de.robv.android.xposed.XC_MethodReplacement;
 

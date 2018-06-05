@@ -1,4 +1,4 @@
-package local.snapcept;
+package local.snapcept.xposed;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
@@ -14,10 +14,13 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import local.snapcept.snapchat.SnapInfo;
-import local.snapcept.utils.FileUtils;
+import local.snapcept.xposed.config.SnapceptSettings;
+import local.snapcept.xposed.snapchat.SnapInfo;
+import local.snapcept.xposed.utils.FileUtils;
 
 public class SnapceptSaver {
+
+    private final SnapceptSettings settings;
 
     private final Context context;
 
@@ -27,14 +30,16 @@ public class SnapceptSaver {
 
     private final File file;
 
-    public SnapceptSaver(Context context, SnapInfo snapInfo) {
+    public SnapceptSaver(SnapceptSettings settings, Context context, SnapInfo snapInfo) {
+        this.settings = settings;
         this.context = context;
         this.snapInfo = snapInfo;
         this.isZipped = snapInfo.isZipped();
         this.file = new File(snapInfo.getFilePath(), snapInfo.getFileName());
     }
 
-    public SnapceptSaver(Context context, boolean isZipped, SnapInfo snapInfo) {
+    public SnapceptSaver(SnapceptSettings settings, Context context, boolean isZipped, SnapInfo snapInfo) {
+        this.settings = settings;
         this.context = context;
         this.snapInfo = snapInfo;
         this.isZipped = isZipped;
@@ -97,6 +102,12 @@ public class SnapceptSaver {
                 if (name.startsWith("media")) {
                     FileUtils.copyInputStreamToFile(zipStream, mediaFile);
                 } else if (name.startsWith("overlay")) {
+
+                    // Disable if overlays are disabled for video snaps.
+                    if (!this.settings.isSnapsSaveVideoOverlay() && snapInfo.isVideo()) {
+                        continue;
+                    }
+
                     String originalPath = mediaFile.getAbsolutePath();
                     String overlayFilePath = originalPath.substring(0, originalPath.length() - 4) + "_overlay.jpg";
 
