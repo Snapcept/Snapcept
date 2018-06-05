@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="snaps_enable"
+        android:title="Enable saving snaps" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="snaps_enable"
+        android:key="snaps_save_image"
+        android:title="Save images" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="snaps_enable"
+        android:key="snaps_save_video"
+        android:title="Save videos" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:dependency="snaps_enable"
+        android:key="snaps_save_video_overlay"
+        android:title="Save video overlay" />
+
+</PreferenceScreen>
