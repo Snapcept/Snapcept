@@ -73,7 +73,7 @@ public class SnapInfo {
     // Related to saving the snap.
 
     public String getFileName() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss-SSS", Locale.ENGLISH);
         StringBuilder fileNameBuilder = new StringBuilder();
 
         fileNameBuilder.append(username);
