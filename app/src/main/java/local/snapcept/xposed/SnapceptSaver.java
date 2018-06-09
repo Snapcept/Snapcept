@@ -50,11 +50,18 @@ public class SnapceptSaver {
      * Saves the SnapInfo object and returns a new InputStream.
      */
     public InputStream save(InputStream realStream) throws IOException {
-        if (isZipped) {
-            return saveZipStream(realStream);
-        } else {
-            return saveStream(realStream);
-        }
+        InputStream result = isZipped
+                ? saveZipStream(realStream)
+                : saveStream(realStream);
+
+        // Let new file be scanned.
+        MediaScannerConnection.scanFile(
+                context,
+                new String[]{this.file.getPath()},
+                null,
+                null);
+
+        return result;
     }
 
     public boolean isSaved() {
@@ -62,12 +69,6 @@ public class SnapceptSaver {
     }
 
     private File createFile() throws IOException {
-        MediaScannerConnection.scanFile(
-                context,
-                new String[] { this.file.getPath() },
-                new String[]{ "image/jpeg" },
-                null);
-
         if (this.file.createNewFile()) {
             return this.file;
         }

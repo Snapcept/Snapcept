@@ -6,13 +6,13 @@ public class SnapConstants {
 
     public static final String PACKAGE_NAME = "com.snapchat.android";
 
-    public static final int PACKAGE_VERSION = 1721;
+    public static final int PACKAGE_VERSION = 1725;
 
-    public static final String PACKAGE_VERSION_STRING = "10.33.0.0";
+    public static final String PACKAGE_VERSION_STRING = "10.33.5.0";
 
     // Snap received, everything is in the same class.
 
-    public static final String SNAP_EVENT_CLASS = "wvj";
+    public static final String SNAP_EVENT_CLASS = "wvr";
 
     public static final String SNAP_EVENT_FIELD_ID = "u";
 
@@ -28,7 +28,7 @@ public class SnapConstants {
 
     // Story received, everything is in the same class.
 
-    public static final String STORY_EVENT_CLASS = "wmu";
+    public static final String STORY_EVENT_CLASS = "wnc";
 
     public static final String STORY_EVENT_IS_VIDEO = SNAP_EVENT_IS_VIDEO;
 
@@ -42,19 +42,19 @@ public class SnapConstants {
 
     // Snap video decryptor, everything is in the same class.
 
-    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "vxh";
+    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "vxp";
 
     public static final String SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT = "a";
 
     // Media cache entry, everything is in the same class.
 
-    public static final String MEDIA_CACHE_ENTRY_CLASS = "wzy";
+    public static final String MEDIA_CACHE_ENTRY_CLASS = "xag";
 
     public static final String MEDIA_CACHE_ENTRY_FIELD_ENCRYPTION_ALGORITHM = "c";
 
     // Snap received processing, everything is in the same class.
 
-    public static final String SNAP_PROCESSING_CLASS = "rze";
+    public static final String SNAP_PROCESSING_CLASS = "rzh";
 
     public static final String SNAP_PROCESSING_HANDLE_METHOD = "a";
 
@@ -70,7 +70,7 @@ public class SnapConstants {
 
     // Root detectors, everything is in the same class.
 
-    public static final String ROOT_DETECTOR_CLASS = "ynw";
+    public static final String ROOT_DETECTOR_CLASS = "yoe";
 
     public static final String ROOT_DETECTOR_FIRST = "b";
 
