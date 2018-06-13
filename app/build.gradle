@@ -6,8 +6,8 @@ android {
         applicationId "local.snapcept"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 20
-        versionName "1.8.0"
+        versionCode 21
+        versionName "1.8.1"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

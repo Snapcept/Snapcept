@@ -6,9 +6,9 @@ public class SnapConstants {
 
     public static final String PACKAGE_NAME = "com.snapchat.android";
 
-    public static final int PACKAGE_VERSION = 1729;
+    public static final int PACKAGE_VERSION = 1731;
 
-    public static final String PACKAGE_VERSION_STRING = "10.34.0.0";
+    public static final String PACKAGE_VERSION_STRING = "10.34.1.0";
 
     // Snap received, everything is in the same class.
 
