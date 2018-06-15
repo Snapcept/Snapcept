@@ -16,6 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import local.snapcept.xposed.config.SnapceptSettings;
 import local.snapcept.xposed.hooks.CbcEncryptionAlgorithmClassHook;
 import local.snapcept.xposed.hooks.RootDetectorOverrides;
+import local.snapcept.xposed.hooks.RootDetectorStringOverrides;
 import local.snapcept.xposed.hooks.SnapEventClassHook;
 import local.snapcept.xposed.hooks.StoryEventClassHook;
 import local.snapcept.xposed.hooks.StoryVideoDecryptorClassHook;
@@ -93,10 +94,17 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
     }
 
     private void hookRootDetectors(ClassLoader loader) {
+        // Snapchat
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_FIRST, new RootDetectorOverrides());
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_SECOND, new RootDetectorOverrides());
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_THIRD, new RootDetectorOverrides());
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_FORTH, new RootDetectorOverrides());
+
+        // Crashlytics
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_TWO_CLASS, loader, SnapConstants.ROOT_DETECTOR_TWO_FIRST, Context.class, new RootDetectorOverrides());
+
+        // Braintree
+        findAndHookMethod(SnapConstants.ROOT_DETECTOR_THREE_CLASS, loader, SnapConstants.ROOT_DETECTOR_THREE_FIRST, new RootDetectorStringOverrides());
     }
 
     private void hookSnapEventClass(ClassLoader loader) {
