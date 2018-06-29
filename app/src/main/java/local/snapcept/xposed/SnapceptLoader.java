@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import local.snapcept.xposed.config.SnapceptSettings;
@@ -41,7 +42,12 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         // Check if we are hooking on the correct package.
-        if (!lpparam.packageName.equals(SnapConstants.PACKAGE_NAME) || !lpparam.isFirstApplication) {
+        if (!lpparam.packageName.equals(SnapConstants.PACKAGE_NAME)) {
+            return;
+        }
+
+        // Skip if not first.
+        if (!lpparam.isFirstApplication) {
             return;
         }
 
