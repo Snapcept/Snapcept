@@ -6,13 +6,13 @@ public class SnapConstants {
 
     public static final String PACKAGE_NAME = "com.snapchat.android";
 
-    public static final int PACKAGE_VERSION = 1739;
+    public static final int PACKAGE_VERSION = 1741;
 
-    public static final String PACKAGE_VERSION_STRING = "10.35.0.0";
+    public static final String PACKAGE_VERSION_STRING = "10.35.5.0";
 
     // Snap received, everything is in the same class.
 
-    public static final String SNAP_EVENT_CLASS = "abbp";
+    public static final String SNAP_EVENT_CLASS = "abbr";
 
     public static final String SNAP_EVENT_FIELD_ID = "u";
 
@@ -28,7 +28,7 @@ public class SnapConstants {
 
     // Story received, everything is in the same class.
 
-    public static final String STORY_EVENT_CLASS = "aasv";
+    public static final String STORY_EVENT_CLASS = "aasx";
 
     public static final String STORY_EVENT_IS_VIDEO = SNAP_EVENT_IS_VIDEO;
 
@@ -42,19 +42,19 @@ public class SnapConstants {
 
     // Snap video decryptor, everything is in the same class.
 
-    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "aadl";
+    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "aadm";
 
     public static final String SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT = "a";
 
     // Media cache entry, everything is in the same class.
 
-    public static final String MEDIA_CACHE_ENTRY_CLASS = "abgb";
+    public static final String MEDIA_CACHE_ENTRY_CLASS = "abgd";
 
     public static final String MEDIA_CACHE_ENTRY_FIELD_ENCRYPTION_ALGORITHM = "c";
 
     // Snap received processing, everything is in the same class.
 
-    public static final String SNAP_PROCESSING_CLASS = "wbl";
+    public static final String SNAP_PROCESSING_CLASS = "wbn";
 
     public static final String SNAP_PROCESSING_HANDLE_METHOD = "a";
 
@@ -70,7 +70,7 @@ public class SnapConstants {
 
     // Root detectors, everything is in the same class.
 
-    public static final String ROOT_DETECTOR_CLASS = "actt";
+    public static final String ROOT_DETECTOR_CLASS = "actu";
 
     public static final String ROOT_DETECTOR_FIRST = "b";
 
@@ -80,7 +80,7 @@ public class SnapConstants {
 
     public static final String ROOT_DETECTOR_FORTH = "e";
 
-    public static final String ROOT_DETECTOR_TWO_CLASS = "amms";
+    public static final String ROOT_DETECTOR_TWO_CLASS = "ammt";
 
     public static final String ROOT_DETECTOR_TWO_FIRST = "f";
 
