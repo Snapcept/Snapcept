@@ -35,6 +35,8 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
     private SnapceptSettings settings;
 
+    private Timer cleanTimer;
+
     public SnapceptLoader() {
         this.processedIds = new HashSet<>();
     }
@@ -66,6 +68,9 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
         // Initialize more values used by the module.
         initializePost();
 
+        // Clear processedIds sometimes.
+        initializeTimer();
+
         // Hook root detectors.
         hookRootDetectors(lpparam.classLoader);
 
@@ -92,6 +97,21 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
     private void initializePost() {
         settings = new SnapceptSettings(context);
+    }
+
+    private void initializeTimer() {
+        if (cleanTimer != null) {
+            return;
+        }
+
+        cleanTimer = new Timer();
+        cleanTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                // Wipe processedIds sometimes so we don't fill up memory.
+                processedIds.clear();
+            }
+        }, 1000 * 60 * 15, 1000 * 60 * 15);
     }
 
     private boolean isVersionCorrect() throws Throwable {
