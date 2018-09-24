@@ -88,6 +88,11 @@ public class SnapConstants {
 
     public static final String ROOT_DETECTOR_THREE_FIRST = "a";
 
+    //screenshot changed found it tho :3
+    public static final String SCREENSHOTDETECTOR_RUN = "a";
+    public static final String SREENSHOT_DETECTOR_CLASS = "anlm";
+    public static final String SCREENSHOTDETECTOR_RUN2 = "a";
+    public static final String SREENSHOT_DETECTOR_CLASS2 = "hlz";
     // Additional info fields
 
     public static final String ADDITIONAL_FIELD_ENCRYPTION_ALGORITHM_SNAP_INFO = "SnapInfo";
