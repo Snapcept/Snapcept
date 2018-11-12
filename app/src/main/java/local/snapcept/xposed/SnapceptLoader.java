@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
@@ -76,8 +77,10 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
         // Hook root detectors.
         hookRootDetectors(lpparam.classLoader);
 
-        // Hook screenshot detectors.
-        hookScreenshotDetectors(lpparam.classLoader);
+        if (settings.isBlockScreenshotDetection()) {
+            // Hook screenshot detectors.
+            hookScreenshotDetectors(lpparam.classLoader);
+        }
 
         // Hook snap event.
         hookSnapEventClass(lpparam.classLoader);
@@ -140,7 +143,7 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
 
     private void hookScreenshotDetectors(ClassLoader loader) {
         findAndHookMethod(SnapConstants.SCREENSHOT_DETECTOR_1_CLASS, loader, SnapConstants.SCREENSHOT_DETECTOR_1_RUN_METHOD, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
-        findAndHookMethod(SnapConstants.SCREENSHOT_DETECTOR_2_CLASS, loader, SnapConstants.SCREENSHOT_DETECTOR_2_RUN_METHOD, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
+        findAndHookMethod(SnapConstants.SCREENSHOT_DETECTOR_2_CLASS, loader, SnapConstants.SCREENSHOT_DETECTOR_2_RUN_METHOD, XC_MethodReplacement.DO_NOTHING);
     }
 
     private void hookSnapEventClass(ClassLoader loader) {

@@ -8,6 +8,7 @@ Click [here](https://github.com/Snapcept/Snapcept/releases/latest) for the lates
 
 ## Features
 
+- Take screenshots without notifying the sender.
 - Save received snap images, videos and their overlays.
 - Save story images / videos of your friends or people you are subscribed to. 
   - Make sure to open their story from the snap overview and not the discovery overview.

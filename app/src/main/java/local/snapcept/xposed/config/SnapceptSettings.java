@@ -15,6 +15,9 @@ public class SnapceptSettings {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             switch (key) {
+                case "block_screen_detect":
+                    blockScreenshotDetection = sharedPreferences.getBoolean("block_screen_detect", true);
+                    break;
                 case "snaps_enable":
                     snapsEnable = sharedPreferences.getBoolean("snaps_enable", true);
                     break;
@@ -42,6 +45,8 @@ public class SnapceptSettings {
 
     private final RemotePreferences preferences;
 
+    private boolean blockScreenshotDetection;
+
     private boolean snapsEnable;
 
     private boolean snapsSaveImage;
@@ -63,6 +68,8 @@ public class SnapceptSettings {
     }
 
     public void reload() {
+        blockScreenshotDetection = this.preferences.getBoolean("block_screen_detect", true);
+
         snapsEnable = this.preferences.getBoolean("snaps_enable", true);
         snapsSaveImage = this.preferences.getBoolean("snaps_save_image", true);
         snapsSaveVideo = this.preferences.getBoolean("snaps_save_video", true);
@@ -71,6 +78,10 @@ public class SnapceptSettings {
         storiesEnable = this.preferences.getBoolean("stories_enable", true);
         storiesSaveImage = this.preferences.getBoolean("stories_save_image", true);
         storiesSaveVideo = this.preferences.getBoolean("stories_save_video", true);
+    }
+
+    public boolean isBlockScreenshotDetection() {
+        return blockScreenshotDetection;
     }
 
     public boolean isSnapsEnable() {

@@ -6,29 +6,29 @@ public class SnapConstants {
 
     public static final String PACKAGE_NAME = "com.snapchat.android";
 
-    public static final int PACKAGE_VERSION = 1779;
+    public static final int PACKAGE_VERSION = 1831;
 
-    public static final String PACKAGE_VERSION_STRING = "10.39.6.0";
+    public static final String PACKAGE_VERSION_STRING = "10.44.5.0";
 
     // Snap received, everything is in the same class.
 
-    public static final String SNAP_EVENT_CLASS = "altf";
+    public static final String SNAP_EVENT_CLASS = "aqvw";
 
     public static final String SNAP_EVENT_FIELD_ID = "u";
 
-    public static final String SNAP_EVENT_IS_VIDEO = "bb_";
+    public static final String SNAP_EVENT_IS_VIDEO = "aX_";
 
-    public static final String SNAP_EVENT_USERNAME_FIELD = "aI";
+    public static final String SNAP_EVENT_USERNAME_FIELD = "aH";
 
     public static final String SNAP_EVENT_TIMESTAMP_FIELD = "y";
 
-    public static final String SNAP_EVENT_IS_ZIPPED_FIELD = "aJ";
+    public static final String SNAP_EVENT_IS_ZIPPED_FIELD = "aI";
 
     public static final String SNAP_EVENT_METHOD_ORIGIN = "v";
 
     // Story received, everything is in the same class.
 
-    public static final String STORY_EVENT_CLASS = "alki";
+    public static final String STORY_EVENT_CLASS = "aqng";
 
     public static final String STORY_EVENT_IS_VIDEO = SNAP_EVENT_IS_VIDEO;
 
@@ -42,19 +42,19 @@ public class SnapConstants {
 
     // Snap video decryptor, everything is in the same class.
 
-    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "akvj";
+    public static final String SNAP_VIDEO_DECRYPTOR_CLASS = "com.snapchat.android.app.shared.crypto.SnapVideoDecryptor";
 
     public static final String SNAP_VIDEO_DECRYPTOR_METHOD_DECRYPT = "a";
 
     // Media cache entry, everything is in the same class.
 
-    public static final String MEDIA_CACHE_ENTRY_CLASS = "alxs";
+    public static final String MEDIA_CACHE_ENTRY_CLASS = "aral";
 
     public static final String MEDIA_CACHE_ENTRY_FIELD_ENCRYPTION_ALGORITHM = "c";
 
     // Snap received processing, everything is in the same class.
 
-    public static final String SNAP_PROCESSING_CLASS = "agtt";
+    public static final String SNAP_PROCESSING_CLASS = "alys";
 
     public static final String SNAP_PROCESSING_HANDLE_METHOD = "a";
 
@@ -70,7 +70,7 @@ public class SnapConstants {
 
     // Root detectors, everything is in the same class.
 
-    public static final String ROOT_DETECTOR_CLASS = "anlk";
+    public static final String ROOT_DETECTOR_CLASS = "asoi";
 
     public static final String ROOT_DETECTOR_FIRST = "b";
 
@@ -80,21 +80,21 @@ public class SnapConstants {
 
     public static final String ROOT_DETECTOR_FORTH = "e";
 
-    public static final String ROOT_DETECTOR_TWO_CLASS = "axdw";
+    public static final String ROOT_DETECTOR_TWO_CLASS = "bcnu";
 
     public static final String ROOT_DETECTOR_TWO_FIRST = "f";
 
-    public static final String ROOT_DETECTOR_THREE_CLASS = "th";
+    public static final String ROOT_DETECTOR_THREE_CLASS = "sm";
 
     public static final String ROOT_DETECTOR_THREE_FIRST = "a";
 
     // Screenshot detection.
 
-    public static final String SCREENSHOT_DETECTOR_1_CLASS = "anlm";
+    public static final String SCREENSHOT_DETECTOR_1_CLASS = "asok";
 
     public static final String SCREENSHOT_DETECTOR_1_RUN_METHOD = "a";
 
-    public static final String SCREENSHOT_DETECTOR_2_CLASS = "hlz";
+    public static final String SCREENSHOT_DETECTOR_2_CLASS = "iur";
 
     public static final String SCREENSHOT_DETECTOR_2_RUN_METHOD = "a";
 
