@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
+
 import java.util.LinkedHashMap;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -24,12 +24,8 @@ import local.snapcept.xposed.hooks.StoryEventClassHook;
 import local.snapcept.xposed.hooks.StoryVideoDecryptorClassHook;
 import local.snapcept.xposed.snapchat.SnapConstants;
 import local.snapcept.xposed.utils.LogUtils;
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 
@@ -80,15 +76,14 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
         // Hook root detectors.
         hookRootDetectors(lpparam.classLoader);
 
+        // Hook screenshot detectors.
+        hookScreenshotDetectors(lpparam.classLoader);
+
         // Hook snap event.
         hookSnapEventClass(lpparam.classLoader);
 
         // Hook story event.
         hookStoryEventClass(lpparam.classLoader);
-
-        //Screen shot bypasses
-        findAndHookMethod(SnapConstants.SREENSHOT_DETECTOR_CLASS, lpparam.classLoader, SnapConstants.SCREENSHOTDETECTOR_RUN, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
-        findAndHookMethod(SnapConstants.SREENSHOT_DETECTOR_CLASS2, lpparam.classLoader, SnapConstants.SCREENSHOTDETECTOR_RUN2, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
 
         // Hook encryption.
         hookCbcEncryptionAlgorithmClass(lpparam.classLoader);
@@ -136,13 +131,16 @@ public class SnapceptLoader implements IXposedHookLoadPackage {
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_THIRD, new RootDetectorOverrides());
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_CLASS, loader, SnapConstants.ROOT_DETECTOR_FORTH, new RootDetectorOverrides());
 
-
-
         // Crashlytics
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_TWO_CLASS, loader, SnapConstants.ROOT_DETECTOR_TWO_FIRST, Context.class, new RootDetectorOverrides());
 
         // Braintree
         findAndHookMethod(SnapConstants.ROOT_DETECTOR_THREE_CLASS, loader, SnapConstants.ROOT_DETECTOR_THREE_FIRST, new RootDetectorStringOverrides());
+    }
+
+    private void hookScreenshotDetectors(ClassLoader loader) {
+        findAndHookMethod(SnapConstants.SCREENSHOT_DETECTOR_1_CLASS, loader, SnapConstants.SCREENSHOT_DETECTOR_1_RUN_METHOD, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
+        findAndHookMethod(SnapConstants.SCREENSHOT_DETECTOR_2_CLASS, loader, SnapConstants.SCREENSHOT_DETECTOR_2_RUN_METHOD, LinkedHashMap.class, XC_MethodReplacement.DO_NOTHING);
     }
 
     private void hookSnapEventClass(ClassLoader loader) {
